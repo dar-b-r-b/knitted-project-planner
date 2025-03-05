@@ -12,18 +12,21 @@ import {
   MenuContent,
   MenuTrigger,
 } from "@chakra-ui/react";
-import { FiPlus, FiMenu } from "react-icons/fi";
+import { FiMenu } from "react-icons/fi";
 import { Searchbar } from "./Searchbar";
+import { deleteProject, editProject, findProject } from "./plannerSlice";
+import { AddProjectDialog } from "./AddProjectDialog";
+import { PLANNED, IN_PROGRESS, DONE } from "../../statuses";
 
 export function Planner() {
   const projectList = useSelector((state) => state.planner.projectList);
   const setColorBadge = (status) => {
     switch (status) {
-      case "запланировано":
+      case PLANNED:
         return "purple";
-      case "связно":
+      case DONE:
         return "green";
-      case "в процессе":
+      case IN_PROGRESS:
         return "";
       default:
     }
@@ -32,19 +35,28 @@ export function Planner() {
   return (
     <Box>
       <Searchbar></Searchbar>
-      <Grid templateColumns="repeat(3, auto)" gap="3">
+      <Grid templateColumns="repeat(3, auto)" gap="3" mb="5">
         {projectList.map((i) => {
           return (
-            <Card.Root maxW="sm" overflow="hidden" ml="3">
-              <MenuRoot>
+            <Card.Root maxW="sm" overflow="visible" ml="3">
+              <MenuRoot
+                positioning={{
+                  placement: "right-start",
+                }}
+              >
                 <MenuTrigger asChild position="absolute" top={2} right={2}>
                   <IconButton size="sm" variant="plain">
                     <FiMenu />
                   </IconButton>
                 </MenuTrigger>
-                <MenuContent>
-                  <MenuItem value="delete">Delete</MenuItem>
-                  <MenuItem value="edit">Edit</MenuItem>
+                <MenuContent
+                  width="120px"
+                  position="absolute"
+                  top={10}
+                  right={2}
+                >
+                  <MenuItem value="edit">Редактировать</MenuItem>{" "}
+                  <MenuItem value="delete">Удалить</MenuItem>
                 </MenuContent>
               </MenuRoot>
               <Card.Body gap="1">
@@ -63,22 +75,13 @@ export function Planner() {
                 <Card.Description mt="5">{i.comment}</Card.Description>
               </Card.Body>
 
-              <Card.Footer gap="1"></Card.Footer>
+              <Card.Footer></Card.Footer>
             </Card.Root>
           );
         })}
       </Grid>
-      <IconButton
-        size="2xl"
-        mr="8"
-        mt="5"
-        borderRadius="full"
-        bottom="10"
-        right="6"
-        position="fixed"
-      >
-        <FiPlus />
-      </IconButton>
+
+      <AddProjectDialog />
     </Box>
   );
 }

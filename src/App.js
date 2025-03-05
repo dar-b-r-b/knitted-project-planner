@@ -1,6 +1,5 @@
 import React from "react";
 import { Provider } from "./components/ui/provider";
-
 import { Planner } from "./features/planner/Planner";
 import { Header } from "./Header";
 

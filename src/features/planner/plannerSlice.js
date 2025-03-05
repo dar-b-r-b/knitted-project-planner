@@ -16,7 +16,17 @@ export const plannerSlice = createSlice({
       },
     ],
   },
-  reducers: {},
+  reducers: {
+    addProject: (state, action) => {
+      state.projectList.push({ ...action.payload, id: uuidv4() });
+    },
+    deleteProject: (state, action) => {},
+    editProject: (state, action) => {},
+    findProject: (state, action) => {},
+
+    //filterProjects: (state,action) => { }
+  },
 });
-export const {} = plannerSlice.actions;
+export const { addProject, deleteProject, editProject, findProject } =
+  plannerSlice.actions;
 export default plannerSlice.reducer;
