@@ -20,13 +20,15 @@ export const plannerSlice = createSlice({
     addProject: (state, action) => {
       state.projectList.push({ ...action.payload, id: uuidv4() });
     },
-    deleteProject: (state, action) => {},
+    deleteProject: (state, action) => {
+      state.projectList.splice(
+        state.projectList.findIndex((p) => p.id === action.payload)
+      );
+    },
     editProject: (state, action) => {},
-    findProject: (state, action) => {},
 
     //filterProjects: (state,action) => { }
   },
 });
-export const { addProject, deleteProject, editProject, findProject } =
-  plannerSlice.actions;
+export const { addProject, deleteProject, editProject } = plannerSlice.actions;
 export default plannerSlice.reducer;

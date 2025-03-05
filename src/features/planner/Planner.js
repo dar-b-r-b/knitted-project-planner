@@ -14,12 +14,13 @@ import {
 } from "@chakra-ui/react";
 import { FiMenu } from "react-icons/fi";
 import { Searchbar } from "./Searchbar";
-import { deleteProject, editProject, findProject } from "./plannerSlice";
+import { deleteProject, editProject } from "./plannerSlice";
 import { AddProjectDialog } from "./AddProjectDialog";
 import { PLANNED, IN_PROGRESS, DONE } from "../../statuses";
 
 export function Planner() {
   const projectList = useSelector((state) => state.planner.projectList);
+  const dispatch = useDispatch();
   const setColorBadge = (status) => {
     switch (status) {
       case PLANNED:
@@ -38,7 +39,7 @@ export function Planner() {
       <Grid templateColumns="repeat(3, auto)" gap="3" mb="5">
         {projectList.map((i) => {
           return (
-            <Card.Root maxW="sm" overflow="visible" ml="3">
+            <Card.Root maxW="sm" overflow="visible" ml="3" key={i.id}>
               <MenuRoot
                 positioning={{
                   placement: "right-start",
@@ -55,8 +56,13 @@ export function Planner() {
                   top={10}
                   right={2}
                 >
-                  <MenuItem value="edit">Редактировать</MenuItem>{" "}
-                  <MenuItem value="delete">Удалить</MenuItem>
+                  <MenuItem value="edit">Редактировать</MenuItem>
+                  <MenuItem
+                    value="delete"
+                    onClick={() => dispatch(deleteProject(i.id))}
+                  >
+                    Удалить
+                  </MenuItem>
                 </MenuContent>
               </MenuRoot>
               <Card.Body gap="1">
