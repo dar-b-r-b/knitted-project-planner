@@ -1,9 +1,8 @@
 import { IconButton, Button, Input, Textarea, HStack } from "@chakra-ui/react";
-import { FiPlus } from "react-icons/fi";
+import { FiPlus, FiX } from "react-icons/fi";
 import {
   DialogActionTrigger,
   DialogBody,
-  DialogCloseTrigger,
   DialogContent,
   DialogFooter,
   DialogHeader,
@@ -14,10 +13,13 @@ import {
 import { Radio, RadioGroup } from "../../components/ui/radio";
 import { addProject } from "./plannerSlice";
 import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { PLANNED, IN_PROGRESS, DONE } from "../../statuses";
+import { closeDialog, openDialog } from "./dialogSlice";
 
-export function AddProjectDialog() {
+export function AddProjectDialog({ idEditableProject, setIdEditableProject }) {
+  const projectList = useSelector((state) => state.planner.projectList);
+  const isOpen = useSelector((state) => state.dialog.isOpen);
   const dispatch = useDispatch();
   const [newProject, setNewProject] = useState({
     id: null,
@@ -38,8 +40,15 @@ export function AddProjectDialog() {
       comment: "",
     });
   };
+  const getValue = (property) => {
+    return (
+      projectList.find((el) => el.id === idEditableProject)?.[property] ??
+      newProject[property]
+    );
+  };
+
   return (
-    <DialogRoot>
+    <DialogRoot open={isOpen}>
       <DialogTrigger asChild>
         <IconButton
           size="2xl"
@@ -49,19 +58,36 @@ export function AddProjectDialog() {
           bottom="10"
           right="6"
           position="fixed"
+          onClick={() => dispatch(openDialog())}
         >
           <FiPlus />
         </IconButton>
       </DialogTrigger>
       <DialogContent>
+        <IconButton
+          variant="ghost"
+          position="absolute"
+          right="2"
+          top="1"
+          onClick={() => {
+            dispatch(closeDialog());
+            setIdEditableProject(null);
+          }}
+        >
+          <FiX />
+        </IconButton>
         <DialogHeader>
-          <DialogTitle>Добавить новый проект</DialogTitle>
+          <DialogTitle>
+            {idEditableProject
+              ? "Редактировать проект"
+              : "Добавить новый проект"}
+          </DialogTitle>
         </DialogHeader>
         <DialogBody>
           <Input
             mb="3"
             placeholder="Название проекта"
-            value={newProject.name}
+            value={getValue("name")}
             onChange={(e) =>
               setNewProject({ ...newProject, name: e.target.value })
             }
@@ -112,7 +138,14 @@ export function AddProjectDialog() {
         </DialogBody>
         <DialogFooter>
           <DialogActionTrigger asChild>
-            <Button variant="outline" onClick={clearField}>
+            <Button
+              variant="outline"
+              onClick={() => {
+                clearField();
+                dispatch(closeDialog());
+                setIdEditableProject(null);
+              }}
+            >
               Закрыть
             </Button>
           </DialogActionTrigger>
@@ -120,12 +153,12 @@ export function AddProjectDialog() {
             onClick={() => {
               dispatch(addProject(newProject));
               clearField();
+              setIdEditableProject(null);
             }}
           >
             Сохранить
           </Button>
         </DialogFooter>
-        <DialogCloseTrigger />
       </DialogContent>
     </DialogRoot>
   );

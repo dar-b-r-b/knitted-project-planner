@@ -6,7 +6,7 @@ export const plannerSlice = createSlice({
   initialState: {
     projectList: [
       {
-        id: 0,
+        id: "ib645hg76",
         name: "Baguette Jacket",
         author: "Soumine KIM",
         yarns: "Como Grande",

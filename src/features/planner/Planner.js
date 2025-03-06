@@ -17,10 +17,13 @@ import { Searchbar } from "./Searchbar";
 import { deleteProject, editProject } from "./plannerSlice";
 import { AddProjectDialog } from "./AddProjectDialog";
 import { PLANNED, IN_PROGRESS, DONE } from "../../statuses";
+import { openDialog } from "./dialogSlice";
 
 export function Planner() {
   const projectList = useSelector((state) => state.planner.projectList);
   const dispatch = useDispatch();
+  const [idEditableProject, setIdEditableProject] = useState(null);
+
   const setColorBadge = (status) => {
     switch (status) {
       case PLANNED:
@@ -56,7 +59,15 @@ export function Planner() {
                   top={10}
                   right={2}
                 >
-                  <MenuItem value="edit">Редактировать</MenuItem>
+                  <MenuItem
+                    value="edit"
+                    onClick={() => {
+                      setIdEditableProject(i.id);
+                      dispatch(openDialog());
+                    }}
+                  >
+                    Редактировать
+                  </MenuItem>
                   <MenuItem
                     value="delete"
                     onClick={() => dispatch(deleteProject(i.id))}
@@ -87,7 +98,10 @@ export function Planner() {
         })}
       </Grid>
 
-      <AddProjectDialog />
+      <AddProjectDialog
+        idEditableProject={idEditableProject}
+        setIdEditableProject={setIdEditableProject}
+      />
     </Box>
   );
 }
