@@ -2,10 +2,11 @@ import { createSlice } from "@reduxjs/toolkit";
 
 export const dialogSlice = createSlice({
   name: "dialog",
-  initialState: { isOpen: false },
+  initialState: { id: null, isOpen: false },
   reducers: {
-    openDialog: (state) => {
+    openDialog: (state, action) => {
       state.isOpen = true;
+      state.id = action.payload;
     },
     closeDialog: (state) => {
       state.isOpen = false;

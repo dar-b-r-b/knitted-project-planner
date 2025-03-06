@@ -22,7 +22,8 @@ export const plannerSlice = createSlice({
     },
     deleteProject: (state, action) => {
       state.projectList.splice(
-        state.projectList.findIndex((p) => p.id === action.payload)
+        state.projectList.findIndex((p) => p.id === action.payload),
+        1
       );
     },
     editProject: (state, action) => {},

@@ -12,16 +12,17 @@ import {
 } from "../../components/ui/dialog";
 import { Radio, RadioGroup } from "../../components/ui/radio";
 import { addProject } from "./plannerSlice";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { PLANNED, IN_PROGRESS, DONE } from "../../statuses";
 import { closeDialog, openDialog } from "./dialogSlice";
 
-export function AddProjectDialog({ idEditableProject, setIdEditableProject }) {
+export function AddProjectDialog() {
   const projectList = useSelector((state) => state.planner.projectList);
   const isOpen = useSelector((state) => state.dialog.isOpen);
+  const idEditableProject = useSelector((state) => state.dialog.id);
   const dispatch = useDispatch();
-  const [newProject, setNewProject] = useState({
+  const [project, setProject] = useState({
     id: null,
     name: "",
     author: "",
@@ -30,8 +31,21 @@ export function AddProjectDialog({ idEditableProject, setIdEditableProject }) {
     status: PLANNED,
     comment: "",
   });
-  const clearField = () => {
-    setNewProject({
+
+  useEffect(() => {
+    if (!isOpen) {
+      return;
+    }
+    const curProject = projectList.find((el) => el.id === idEditableProject);
+    if (curProject) {
+      setProject(curProject);
+    } else {
+      clearFields();
+    }
+  }, [isOpen]);
+
+  const clearFields = () => {
+    setProject({
       name: "",
       author: "",
       yarns: "",
@@ -39,12 +53,6 @@ export function AddProjectDialog({ idEditableProject, setIdEditableProject }) {
       status: PLANNED,
       comment: "",
     });
-  };
-  const getValue = (property) => {
-    return (
-      projectList.find((el) => el.id === idEditableProject)?.[property] ??
-      newProject[property]
-    );
   };
 
   return (
@@ -71,7 +79,6 @@ export function AddProjectDialog({ idEditableProject, setIdEditableProject }) {
           top="1"
           onClick={() => {
             dispatch(closeDialog());
-            setIdEditableProject(null);
           }}
         >
           <FiX />
@@ -87,39 +94,35 @@ export function AddProjectDialog({ idEditableProject, setIdEditableProject }) {
           <Input
             mb="3"
             placeholder="Название проекта"
-            value={getValue("name")}
-            onChange={(e) =>
-              setNewProject({ ...newProject, name: e.target.value })
-            }
+            value={project.name}
+            onChange={(e) => setProject({ ...project, name: e.target.value })}
           />
           <Input
             mb="3"
             placeholder="Автор"
-            value={newProject.author}
+            value={project.author}
             onChange={(e) => {
-              setNewProject({ ...newProject, author: e.target.value });
+              setProject({ ...project, author: e.target.value });
             }}
           />
           <Input
             mb="3"
             placeholder="Пряжа"
-            value={newProject.yarns}
-            onChange={(e) =>
-              setNewProject({ ...newProject, yarns: e.target.value })
-            }
+            value={project.yarns}
+            onChange={(e) => setProject({ ...project, yarns: e.target.value })}
           />
           <Input
             mb="5"
             placeholder="Дедлайн"
-            value={newProject.deadline}
+            value={project.deadline}
             onChange={(e) =>
-              setNewProject({ ...newProject, deadline: e.target.value })
+              setProject({ ...project, deadline: e.target.value })
             }
           />
           <RadioGroup
-            value={newProject.status}
+            value={project.status}
             onValueChange={({ value }) =>
-              setNewProject({ ...newProject, status: value })
+              setProject({ ...project, status: value })
             }
           >
             <HStack gap="6" mb="5">
@@ -130,9 +133,9 @@ export function AddProjectDialog({ idEditableProject, setIdEditableProject }) {
           </RadioGroup>
           <Textarea
             placeholder="Комментарий"
-            value={newProject.comment}
+            value={project.comment}
             onChange={(e) =>
-              setNewProject({ ...newProject, comment: e.target.value })
+              setProject({ ...project, comment: e.target.value })
             }
           />
         </DialogBody>
@@ -141,9 +144,8 @@ export function AddProjectDialog({ idEditableProject, setIdEditableProject }) {
             <Button
               variant="outline"
               onClick={() => {
-                clearField();
+                clearFields();
                 dispatch(closeDialog());
-                setIdEditableProject(null);
               }}
             >
               Закрыть
@@ -151,9 +153,8 @@ export function AddProjectDialog({ idEditableProject, setIdEditableProject }) {
           </DialogActionTrigger>
           <Button
             onClick={() => {
-              dispatch(addProject(newProject));
-              clearField();
-              setIdEditableProject(null);
+              dispatch(addProject(project));
+              clearFields();
             }}
           >
             Сохранить

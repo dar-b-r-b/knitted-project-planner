@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
   Grid,
@@ -15,14 +15,13 @@ import {
 import { FiMenu } from "react-icons/fi";
 import { Searchbar } from "./Searchbar";
 import { deleteProject, editProject } from "./plannerSlice";
-import { AddProjectDialog } from "./AddProjectDialog";
+import { AddProjectDialog } from "./ProjectDialog";
 import { PLANNED, IN_PROGRESS, DONE } from "../../statuses";
 import { openDialog } from "./dialogSlice";
 
 export function Planner() {
   const projectList = useSelector((state) => state.planner.projectList);
   const dispatch = useDispatch();
-  const [idEditableProject, setIdEditableProject] = useState(null);
 
   const setColorBadge = (status) => {
     switch (status) {
@@ -39,7 +38,7 @@ export function Planner() {
   return (
     <Box>
       <Searchbar></Searchbar>
-      <Grid templateColumns="repeat(3, auto)" gap="3" mb="5">
+      <Grid templateColumns="repeat(3, 1fr)" gap="3" mb="5">
         {projectList.map((i) => {
           return (
             <Card.Root maxW="sm" overflow="visible" ml="3" key={i.id}>
@@ -62,8 +61,7 @@ export function Planner() {
                   <MenuItem
                     value="edit"
                     onClick={() => {
-                      setIdEditableProject(i.id);
-                      dispatch(openDialog());
+                      dispatch(openDialog(i.id));
                     }}
                   >
                     Редактировать
@@ -98,10 +96,7 @@ export function Planner() {
         })}
       </Grid>
 
-      <AddProjectDialog
-        idEditableProject={idEditableProject}
-        setIdEditableProject={setIdEditableProject}
-      />
+      <AddProjectDialog />
     </Box>
   );
 }
