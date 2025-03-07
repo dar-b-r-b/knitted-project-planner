@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
   Grid,
@@ -14,13 +14,14 @@ import {
 } from "@chakra-ui/react";
 import { FiMenu } from "react-icons/fi";
 import { Searchbar } from "./Searchbar";
-import { deleteProject, editProject } from "./plannerSlice";
+import { deleteProject } from "./plannerSlice";
 import { AddProjectDialog } from "./ProjectDialog";
 import { PLANNED, IN_PROGRESS, DONE } from "../../statuses";
 import { openDialog } from "./dialogSlice";
 
 export function Planner() {
   const projectList = useSelector((state) => state.planner.projectList);
+  const [searchList, setSearchList] = useState(projectList);
   const dispatch = useDispatch();
 
   const setColorBadge = (status) => {
@@ -37,11 +38,11 @@ export function Planner() {
 
   return (
     <Box>
-      <Searchbar></Searchbar>
-      <Grid templateColumns="repeat(3, 1fr)" gap="3" mb="5">
-        {projectList.map((i) => {
+      <Searchbar setSearchList={setSearchList}></Searchbar>
+      <Grid templateColumns="repeat(3, 1fr)" mb="5">
+        {searchList.map((i) => {
           return (
-            <Card.Root maxW="sm" overflow="visible" ml="3" key={i.id}>
+            <Card.Root maxW="sm" overflow="visible" ml="4" key={i.id}>
               <MenuRoot
                 positioning={{
                   placement: "right-start",

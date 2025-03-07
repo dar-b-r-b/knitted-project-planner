@@ -6,12 +6,30 @@ export const plannerSlice = createSlice({
   initialState: {
     projectList: [
       {
-        id: "ib645hg76",
+        id: "ib045hg70",
         name: "Baguette Jacket",
         author: "Soumine KIM",
         yarns: "Como Grande",
         deadline: "2 June",
         status: "запланировано", // запланировано, в процессе, связано
+        comment: "Ut id voluptate enim do officia",
+      },
+      {
+        id: "ib645hg76",
+        name: "Drift Jacket",
+        author: "Row",
+        yarns: "Como Grande",
+        deadline: "2 June",
+        status: "запланировано", // запланировано, в процессе, связано
+        comment: "Ut id voluptate enim do officia",
+      },
+      {
+        id: "ib045hg76",
+        name: "Sailor Collar Pullover",
+        author: "Soumine KIM",
+        yarns: "Como Grande",
+        deadline: "2 June",
+        status: "в процессе", // запланировано, в процессе, связано
         comment: "Ut id voluptate enim do officia",
       },
     ],
@@ -28,14 +46,11 @@ export const plannerSlice = createSlice({
     },
     editProject: (state, action) => {
       const { id, project } = action.payload;
-      console.log(action.payload);
       const projectIndex = state.projectList.findIndex((p) => p.id === id);
       if (projectIndex !== -1) {
         state.projectList[projectIndex] = project;
       }
     },
-
-    //filterProjects: (state,action) => { }
   },
 });
 export const { addProject, deleteProject, editProject } = plannerSlice.actions;
