@@ -26,7 +26,14 @@ export const plannerSlice = createSlice({
         1
       );
     },
-    editProject: (state, action) => {},
+    editProject: (state, action) => {
+      const { id, project } = action.payload;
+      console.log(action.payload);
+      const projectIndex = state.projectList.findIndex((p) => p.id === id);
+      if (projectIndex !== -1) {
+        state.projectList[projectIndex] = project;
+      }
+    },
 
     //filterProjects: (state,action) => { }
   },

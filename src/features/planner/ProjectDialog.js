@@ -11,7 +11,7 @@ import {
   DialogTrigger,
 } from "../../components/ui/dialog";
 import { Radio, RadioGroup } from "../../components/ui/radio";
-import { addProject } from "./plannerSlice";
+import { addProject, editProject } from "./plannerSlice";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { PLANNED, IN_PROGRESS, DONE } from "../../statuses";
@@ -153,7 +153,12 @@ export function AddProjectDialog() {
           </DialogActionTrigger>
           <Button
             onClick={() => {
-              dispatch(addProject(project));
+              if (idEditableProject) {
+                dispatch(editProject({ id: idEditableProject, project }));
+                dispatch(closeDialog());
+              } else {
+                dispatch(addProject(project));
+              }
               clearFields();
             }}
           >
