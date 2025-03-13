@@ -39,10 +39,19 @@ export function Planner() {
   return (
     <Box>
       <Searchbar setSearchList={setSearchList}></Searchbar>
-      <Grid templateColumns="repeat(3, 1fr)" mb="5">
+      <Grid
+        templateColumns={{
+          base: "repeat(1, 1fr)",
+          md: "repeat(3, 1fr)",
+          lg: "repeat(3, 1fr)",
+          xl: "repeat(5, 1fr)",
+        }}
+        gap={4}
+        mb="5"
+      >
         {searchList.map((i) => {
           return (
-            <Card.Root maxW="sm" overflow="visible" ml="4" key={i.id}>
+            <Card.Root overflow="visible" ml="4" key={i.id}>
               <MenuRoot
                 positioning={{
                   placement: "right-start",

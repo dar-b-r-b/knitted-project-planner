@@ -8,12 +8,14 @@ export function Searchbar({ setSearchList }) {
   const projectList = useSelector((state) => state.planner.projectList);
 
   const searchProject = (e) => {
-    const newList = projectList.filter(
-      (el) =>
-        !e.target.value ||
+    if (!e.target.value) {
+      setSearchList(projectList);
+    } else {
+      const newList = projectList.filter((el) =>
         el.name.toLowerCase().includes(e.target.value.toLowerCase())
-    );
-    setSearchList(newList);
+      );
+      setSearchList(newList);
+    }
   };
   const filterProject = (e) => {
     if (!e.target.value) {
@@ -28,12 +30,25 @@ export function Searchbar({ setSearchList }) {
   return (
     <Group display="flex" justifyContent="center" mb="5">
       <Input
-        width="30%"
+        width={{
+          base: "50%",
+          md: "40%",
+          lg: "30%",
+          xl: "30%",
+        }}
         placeholder="Введите название проекта"
         onChange={searchProject}
       ></Input>
 
-      <NativeSelect.Root size="md" width="240px">
+      <NativeSelect.Root
+        size="md"
+        width={{
+          base: "40%",
+          md: "30%",
+          lg: "20%",
+          xl: "15%",
+        }}
+      >
         <NativeSelect.Field defaultValue={""} onChange={filterProject}>
           <option value="">Показать все</option>
           <option value={PLANNED}>Запланировано</option>
