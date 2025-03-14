@@ -1,41 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { v4 as uuidv4 } from "uuid";
+import { projectList } from "../../prolectList";
 
 export const plannerSlice = createSlice({
   name: "planner",
   initialState: {
-    projectList: [
-      {
-        id: "ib045hg70",
-        name: "Baguette Jacket",
-        author: "Soumine KIM",
-        yarns: "Como Grande",
-        deadline: "2 June",
-        status: "запланировано", // запланировано, в процессе, связано
-        comment: "Ut id voluptate enim do officia",
-      },
-      {
-        id: "ib645hg76",
-        name: "Drift Jacket",
-        author: "Row",
-        yarns: "Como Grande",
-        deadline: "2 June",
-        status: "запланировано", // запланировано, в процессе, связано
-        comment: "Ut id voluptate enim do officia",
-      },
-      {
-        id: "ib045hg76",
-        name: "Sailor Collar Pullover",
-        author: "Soumine KIM",
-        yarns: "Como Grande",
-        deadline: "2 June",
-        status: "в процессе", // запланировано, в процессе, связано
-        comment: "Ut id voluptate enim do officia",
-      },
-    ],
+    projectList,
   },
   reducers: {
     addProject: (state, action) => {
+      console.log(uuidv4());
       state.projectList.push({ ...action.payload, id: uuidv4() });
     },
     deleteProject: (state, action) => {

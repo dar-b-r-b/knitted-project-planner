@@ -44,9 +44,9 @@ export function Planner() {
           base: "repeat(1, 1fr)",
           md: "repeat(3, 1fr)",
           lg: "repeat(3, 1fr)",
-          xl: "repeat(5, 1fr)",
+          xl: "repeat(4, 1fr)",
         }}
-        gap={4}
+        gap={3}
         mb="5"
       >
         {searchList.map((i) => {
