@@ -1,4 +1,11 @@
-import { IconButton, Button, Input, Textarea, HStack } from "@chakra-ui/react";
+import {
+  IconButton,
+  Button,
+  Input,
+  Textarea,
+  HStack,
+  Field,
+} from "@chakra-ui/react";
 import { FiPlus, FiX } from "react-icons/fi";
 import {
   DialogActionTrigger,
@@ -91,12 +98,16 @@ export function AddProjectDialog() {
           </DialogTitle>
         </DialogHeader>
         <DialogBody>
-          <Input
-            mb="3"
-            placeholder="Название проекта"
-            value={project.name}
-            onChange={(e) => setProject({ ...project, name: e.target.value })}
-          />
+          <Field.Root>
+            <Field.HelperText ml="2">Обязательное поле</Field.HelperText>
+            <Input
+              mb="3"
+              placeholder="Название проекта"
+              value={project.name}
+              onChange={(e) => setProject({ ...project, name: e.target.value })}
+            />
+          </Field.Root>
+
           <Input
             mb="3"
             placeholder="Автор"
@@ -157,7 +168,9 @@ export function AddProjectDialog() {
                 dispatch(editProject({ id: idEditableProject, project }));
                 dispatch(closeDialog());
               } else {
-                dispatch(addProject(project));
+                project.name
+                  ? dispatch(addProject(project))
+                  : alert("Заполните обязательные поля");
               }
               clearFields();
             }}
